@@ -102,15 +102,18 @@ CTLinkedList class >> streamSpecies [
 
 { #category : #adding }
 CTLinkedList >> add: aLinkOrObject [
-	"Add aLink to the end of the receiver's list. Answer aLink."
-
-	^self addLast: aLinkOrObject
+	"Add aLink at the end of the list. Answer aLink."
+	
+	| aLink |
+	aLink := self linkOn: aLinkOrObject.
+	self addLast: aLink.
+	^aLink
 ]
 
 { #category : #adding }
 CTLinkedList >> add: link after: otherLinkOrObject [
-	"Add otherLink  after link in the list. Answer aLink."
-
+	"Add otherLink after link in the list. Answer aLink."
+	
 	| otherLink |
 	otherLink := self linkAt: (self indexOf: otherLinkOrObject).
 	^ self add: link afterLink: otherLink
@@ -118,22 +121,21 @@ CTLinkedList >> add: link after: otherLinkOrObject [
 
 { #category : #adding }
 CTLinkedList >> add: aLinkOrObject afterLink: otherLink [
-
-	"Add otherLink  after link in the list. Answer aLink."
-
+	"Add otherLink after link in the list. Answer aLink."
+	
 	| savedLink aLink |
 	lastLink == otherLink ifTrue: [^ self addLast: aLinkOrObject].
 	savedLink := otherLink nextLink.
 	aLink := self linkOn: aLinkOrObject.
 	otherLink nextLink: aLink.
 	aLink nextLink:  savedLink.
-	^aLink.
+	^aLink
 ]
 
 { #category : #adding }
 CTLinkedList >> add: link before: otherLinkOrObject [
-	"Add otherLink  after link in the list. Answer aLink."
-
+	"Add otherLink before link in the list. Answer aLink."
+	
 	| otherLink |
 	otherLink := self linkAt: (self indexOf: otherLinkOrObject).
 	^ self add: link beforeLink: otherLink
@@ -141,23 +143,15 @@ CTLinkedList >> add: link before: otherLinkOrObject [
 
 { #category : #adding }
 CTLinkedList >> add: aLinkOrObject beforeLink: otherLink [
-
-	| currentLink|
-
-	firstLink == otherLink ifTrue: [^ self addFirst: aLinkOrObject].
+	"Add otherLink before link in the list. Answer aLink."
 	
-	currentLink := firstLink.
-	[currentLink == nil] whileFalse: [
-		currentLink nextLink == otherLink ifTrue: [
-			| aLink |
-			aLink := self linkOn: aLinkOrObject.
-			aLink nextLink: currentLink nextLink.
-			currentLink nextLink: aLink.
-			^ aLink
-		].
-		 currentLink := currentLink nextLink.
-	].
-	^ self errorNotFound: otherLink
+	| savedLink aLink |
+	firstLink == otherLink ifTrue: [^ self addFirst: aLinkOrObject].
+	savedLink := otherLink.
+	aLink := self linkOn: aLinkOrObject.
+	self linkAt: (self indexOf: otherLink) - 1 nextLink: aLink.
+	aLink nextLink: savedLink.
+	^aLink
 ]
 
 { #category : #adding }

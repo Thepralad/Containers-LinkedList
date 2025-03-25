@@ -1046,3 +1046,85 @@ CTLinkedListTest >> valueLinkElementClass [
 
 	^ CTValueLink
 ]
+
+{ #category : #tests }
+CTLinkedListTest >> test00emptyList [
+	"Test empty list properties"
+	self assert: list isEmpty.
+	self assert: list size = 0.
+	self should: [list first] raise: Error.
+	self should: [list last] raise: Error.
+]
+
+{ #category : #tests }
+CTLinkedListTest >> test01addFirst [
+	"Test adding to empty list"
+	list add: link1.
+	self assert: list size = 1.
+	self assert: list first == link1.
+	self assert: list last == link1.
+]
+
+{ #category : #tests }
+CTLinkedListTest >> test14removeFirst [
+	"Test removing first element"
+	list add: link1.
+	list add: link2.
+	self assert: list size = 2.
+	
+	list removeFirst.
+	self assert: list size = 1.
+	self assert: list first == link2.
+	
+	list removeFirst.
+	self assert: list isEmpty.
+]
+
+{ #category : #tests }
+CTLinkedListTest >> test15removeLast [
+	"Test removing last element"
+	list add: link1.
+	list add: link2.
+	self assert: list size = 2.
+	
+	list removeLast.
+	self assert: list size = 1.
+	self assert: list last == link1.
+	
+	list removeLast.
+	self assert: list isEmpty.
+]
+
+{ #category : #tests }
+CTLinkedListTest >> test16removeFromEmpty [
+	"Test removing from empty list"
+	self should: [list removeFirst] raise: Error.
+	self should: [list removeLast] raise: Error.
+	self should: [list remove: link1] raise: Error.
+]
+
+{ #category : #tests }
+CTLinkedListTest >> test17swapElements [
+	"Test swapping elements"
+	list add: link1.
+	list add: link2.
+	list add: link3.
+	
+	list swap: 1 with: 3.
+	self assert: list first == link3.
+	self assert: list second == link2.
+	self assert: list third == link1.
+	
+	list swap: 2 with: 3.
+	self assert: list first == link3.
+	self assert: list second == link1.
+	self assert: list third == link2.
+]
+
+{ #category : #tests }
+CTLinkedListTest >> test18swapInvalidIndices [
+	"Test swapping with invalid indices"
+	self should: [list swap: 1 with: 0] raise: Error.
+	self should: [list swap: 0 with: 1] raise: Error.
+	self should: [list swap: 1 with: -1] raise: Error.
+]
